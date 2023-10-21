@@ -88,7 +88,6 @@
 //}
 
 import android.icu.util.Calendar
-import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -102,7 +101,6 @@ import androidx.compose.ui.unit.dp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.material3.MaterialTheme
@@ -117,11 +115,9 @@ import androidx.compose.ui.unit.*
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.material.icons.*
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.ColorFilter
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 
@@ -154,23 +150,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WeatherForecast() {
+    // Generates weeks dates
     val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
     val calendar = Calendar.getInstance()
+    val todayDayOfMonth = dateFormat.format(Date()) // Get today's day of the month
+
 
     val weekDates = (0 until 7).map {
+
         val dayOfMonth = dateFormat.format(calendar.time)
         calendar.add(Calendar.DAY_OF_MONTH, 1)
         dayOfMonth
+
     }
+
+
     val weatherList = remember {
         listOf(
-//            WeatherData("SAT", R.drawable.ic_cloudy, "21"),
-//            WeatherData("SUN", R.drawable.ic_sunny, "22"),
-//            WeatherData("MON", R.drawable.ic_rainy, "23"),
-//            WeatherData("TUE", R.drawable.ic_cloudy, "24"),
-//            WeatherData("WED", R.drawable.ic_sunny, "25"),
-//            WeatherData("THU", R.drawable.ic_rainy, "26"),
-//            WeatherData("FRI", R.drawable.ic_cloudy, "27")
             WeatherData("SAT",R.drawable.sun,weekDates[0]),
             WeatherData("SUN",R.drawable.cloud ,weekDates[1]),
             WeatherData("MON",R.drawable.storm,weekDates[2]),
@@ -182,16 +178,21 @@ fun WeatherForecast() {
     }
 
     LazyRow(
+
         content = {
             items(weatherList) { weatherData ->
-                WeatherColumn(weatherData = weatherData)
+                WeatherColumn(weatherData = weatherData , todayDayOfMonth)
             }
         }
     )
 }
 
 @Composable
-fun WeatherColumn(weatherData: WeatherData) {
+fun WeatherColumn(weatherData: WeatherData, today: String) {
+
+    val iconTint = if (weatherData.date == today) Color.Red else Color.Black
+    val textColor = if (weatherData.date == today) Color.Red else Color.Black
+
     Column(
         modifier = Modifier
             .width(100.dp)
@@ -201,15 +202,23 @@ fun WeatherColumn(weatherData: WeatherData) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(text = weatherData.day, modifier = Modifier.padding(4.dp))
+        Text(
+            text = weatherData.day, modifier = Modifier.padding(4.dp) ,
+            color = textColor
+        )
         // Display Icon using Image composable
         Image(
             painter = painterResource(id = weatherData.icon), // Use the custom icon resource
             contentDescription = null, // Provide a proper content description
-            modifier = Modifier.size(48.dp) // Adjust the size of the icon as needed
+            modifier = Modifier.size(48.dp) ,// Adjust the size of the icon as needed
+            colorFilter = ColorFilter.tint(iconTint)
         )
 
-        Text(text = weatherData.date, modifier = Modifier.padding(4.dp))
+        Text(
+            text = weatherData.date,
+            modifier = Modifier.padding(4.dp),
+            color = textColor
+        )
     }
 }
 
