@@ -87,6 +87,7 @@
 //    }
 //}
 
+import android.graphics.drawable.Icon
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -114,7 +115,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import androidx.compose.material.icons.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.ColorFilter
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -268,27 +273,51 @@ fun MyBackgroundImage() {
                         .border(
                             width = 2.dp,
                             color = Color.Red,
-//                        shape =
                         )
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
-
                 ) {
-                    Text(
-                        text = "MUMBAI",
-                        fontSize = 18.sp,
-                        color = Color.White,
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(28.dp)
+                        )
+                        Text(
+                            text = "MUMBAI",
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(28.dp)
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Build,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
                 }
                 Row(
                     modifier = Modifier
 
                         .fillMaxWidth()
-//                        .height(200.dp)
                         .border(
                             width = 2.dp,
                             color = Color.Red,
-//                        shape =
                         )
                         .padding(16.dp),
 
@@ -300,7 +329,6 @@ fun MyBackgroundImage() {
                         color = Color.White,
                     )
                     Column (
-//                        modifier = Modifier.size(100.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ){
                         Text(
@@ -316,7 +344,6 @@ fun MyBackgroundImage() {
                     }
                     Spacer(modifier = Modifier.width(170.dp))
                     Column (
-//                        modifier = Modifier.size(100.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     )
                     {
@@ -332,17 +359,7 @@ fun MyBackgroundImage() {
                         )
                     }
                 }
-
             }
-
-            Text(
-                text = "Welcome to My App",
-                style = MaterialTheme.typography.displayLarge,
-                color = Color.White,
-                modifier = Modifier.align(Alignment.Center)
-            )
-
-
         }
         WeatherForecast()
     }
