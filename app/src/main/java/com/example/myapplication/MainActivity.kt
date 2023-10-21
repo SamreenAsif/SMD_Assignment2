@@ -378,7 +378,9 @@ fun MainRow( city: String, humidity: String, temperature: String) {
         modifier = Modifier
             .fillMaxWidth()
             .border(width = 2.dp, color = Color.Red)
-            .padding(24.dp),
+            .padding(24.dp)
+            .height(70.dp)
+                ,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column() {
