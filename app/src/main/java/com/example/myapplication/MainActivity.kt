@@ -116,11 +116,18 @@ import androidx.compose.ui.unit.*
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -364,12 +371,129 @@ fun MyBackgroundImage() {
         WeatherForecast()
     }
 }
+@Composable
+fun MainRow( city: String, humidity: String, temperature: String) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(width = 2.dp, color = Color.Red)
+            .padding(24.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column() {
+            Text(city)
+            Text("Humidity: $humidity")
+        }
+        Text(temperature)
+    }
+}
+
+@Composable
+fun LocationPage (){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
+        Row(
+            modifier = Modifier
+                .height(250.dp)
+                .fillMaxWidth()
+                .border(width = 1.dp, color = Color.Blue)
+        ){
+            Column(
+                modifier = Modifier.weight(3f)
+                    .padding(10.dp)
+                    ,
+                horizontalAlignment = Alignment.Start ,
+                verticalArrangement = Arrangement.SpaceEvenly
+
+            ){
+                Row(
+                    modifier = Modifier
+
+                        .fillMaxWidth()
+                            ,
+                    horizontalArrangement = Arrangement.SpaceBetween ,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        tint = Color.Gray,
+                        modifier = Modifier.size(24.dp)
+
+                    )
+                    Text(
+                        "LOCATIONS",
+                        fontSize = 24.sp,
+                        modifier = Modifier.padding(start=10.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null,
+                        tint = Color.Gray,
+                        modifier = Modifier
+                            .size(28.dp, 50.dp) // Set the initial size
+                            .rotate(90f) // Rotate the icon 90 degrees clockwise
+                            .padding(2.dp) // Add padding to maintain aspect ratio
+                    )
+                }
+
+                Text(
+                    "You are currently getting results " +
+                            "for popular places from India",
+                    modifier = Modifier.padding(14.dp)
+                )
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors= ButtonDefaults.buttonColors(Color.LightGray , Color.Blue) ,
+                    modifier = Modifier.padding(14.dp)
+
+                )
+                {
+                    Text("Choose Place")
+
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1.5f)
+                    .fillMaxHeight()
+                    .background(color = Color.LightGray) ,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier.size(28.dp)
+
+                )
+                Text(
+                    "ADD PLACE",
+                    fontSize = 14.sp ,
+//                    modifier = Modifier.margin
+                )
+            }
+        }
+        MainRow("Mumbai", "51%", "28, Sunny")
+        MainRow("Indore", "35%", "24, Smoke")
+        MainRow("Bhopal", "35%", "21, Clear")
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MyApplicationTheme {
 //        WeatherForecast()
 //        ImageLayout()
-        MyBackgroundImage()
+//        MyBackgroundImage()
+        LocationPage()
     }
 }
