@@ -104,6 +104,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -124,10 +125,17 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -277,10 +285,10 @@ fun MyBackgroundImage() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(
-                            width = 2.dp,
-                            color = Color.Red,
-                        )
+//                        .border(
+//                            width = 2.dp,
+//                            color = Color.Red,
+//                        )
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -322,10 +330,10 @@ fun MyBackgroundImage() {
                     modifier = Modifier
 
                         .fillMaxWidth()
-                        .border(
-                            width = 2.dp,
-                            color = Color.Red,
-                        )
+//                        .border(
+//                            width = 2.dp,
+//                            color = Color.Red,
+//                        )
                         .padding(16.dp),
 
                 verticalAlignment = Alignment.CenterVertically,
@@ -373,36 +381,81 @@ fun MyBackgroundImage() {
 }
 @Composable
 fun MainRow( city: String, humidity: String, temperature: String) {
+    var isClicked by remember { mutableStateOf(false) }
+
+    val backgroundColor = if (isClicked) {
+        Color(0xFF834ECE) // Change to your desired color
+    } else {
+        Color.White // Default background color
+    }
+    val textColor = if (isClicked) {
+        Color.Magenta // Text color when clicked
+    } else {
+        Color(0xFF713ABE)// Default text color
+    }
+    val cityColor = if (isClicked) {
+        Color.White // Text color when clicked
+    } else {
+       Color.Black // Default text color
+    }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(width = 2.dp, color = Color.Red)
+
+//            .border(width = 2.dp, color = Color.Red)
+
+            .then(if (isClicked) Modifier.shadow(20.dp) else Modifier)
+
+            .background(backgroundColor)
+
+            .clickable {
+                isClicked = !isClicked
+            }
             .padding(24.dp)
-            .height(70.dp)
-                ,
+            .height(60.dp)
+        ,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column() {
-            Text(city)
-            Text("Humidity: $humidity")
+            Text(
+                text = city ,
+                fontSize = 24.sp,
+                color= cityColor ,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Medium,
+            )
+            Text(
+                "Humidity: $humidity"
+                , color = Color(0xFF938F9B),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top=10.dp)
+            )
         }
-        Text(temperature)
+        Text(
+            temperature,
+            color = textColor,
+            fontWeight = FontWeight.Medium,
+
+        )
     }
 }
 
 @Composable
 fun LocationPage (){
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
+            .background(Color.White)
     ) {
         Row(
             modifier = Modifier
-                .height(250.dp)
+                .height(300.dp)
                 .fillMaxWidth()
-                .border(width = 1.dp, color = Color.Blue)
+
+//                .border(width = 1.dp, color = Color.Blue)
         ){
             Column(
                 modifier = Modifier.weight(3f)
@@ -429,8 +482,10 @@ fun LocationPage (){
                     )
                     Text(
                         "LOCATIONS",
-                        fontSize = 24.sp,
+                        fontSize = 22.sp,
                         modifier = Modifier.padding(start=10.dp)
+                        , color = Color.Black,
+                        fontWeight = FontWeight.Medium,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(
@@ -448,15 +503,24 @@ fun LocationPage (){
                     "You are currently getting results " +
                             "for popular places from India",
                     modifier = Modifier.padding(14.dp)
+                    , color = Color.Black ,
+
                 )
                 Button(
                     onClick = { /*TODO*/ },
-                    colors= ButtonDefaults.buttonColors(Color.LightGray , Color.Blue) ,
-                    modifier = Modifier.padding(14.dp)
+                    colors= ButtonDefaults.buttonColors(Color.LightGray ,   Color(0xFF713ABE)) ,
+                    modifier = Modifier.padding(16.dp)
+                        .height(50.dp),
+
 
                 )
                 {
-                    Text("Choose Place")
+                    Text(
+                        "Choose Place" ,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                        )
+
 
                 }
             }
@@ -480,14 +544,22 @@ fun LocationPage (){
                     "ADD PLACE",
                     fontSize = 14.sp ,
 //                    modifier = Modifier.margin
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium,
                 )
             }
         }
+
+        Divider(
+            color = Color.Gray,
+            thickness = 1.dp,
+        )
         MainRow("Mumbai", "51%", "28, Sunny")
         MainRow("Indore", "35%", "24, Smoke")
         MainRow("Bhopal", "35%", "21, Clear")
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -497,5 +569,7 @@ fun GreetingPreview() {
 //        ImageLayout()
 //        MyBackgroundImage()
         LocationPage()
+//        MainRow("Bhopal", "35%", "21, Clear")
+
     }
 }
