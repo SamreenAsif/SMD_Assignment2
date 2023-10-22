@@ -1,99 +1,9 @@
-//package com.example.myapplication
-//
-//import android.os.Bundle
-//import androidx.activity.ComponentActivity
-//import androidx.activity.compose.setContent
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.background
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.material3.MaterialTheme
-//import androidx.compose.material3.Surface
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.res.colorResource
-//import androidx.compose.ui.tooling.preview.Preview
-//import androidx.compose.ui.unit.*
-//import com.example.myapplication.ui.theme.MyApplicationTheme
-//
-//class MainActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//
-//            MyApplicationTheme {
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    LocationView()
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//
-//@Composable
-//fun LocationView(){
-//    Column(
-//        Modifier
-//            .padding(16.dp)
-//            .fillMaxWidth()
-//            .background(color = Color.White)
-//    )
-//    {
-//        Text("Alfred Sisley")
-//        Text("3 minutes ago")
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(100.dp)
-////                .padding(16.dp)
-//                .background(color = Color.LightGray)
-//                ,
-////            horizontalArrangement = Arrangement.Center ,
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//
-//            Column(
-//                modifier = Modifier
-//                    .padding(16.dp)
-//            ){
-//                Text("Indore")
-//                Text("humidity : 33%")
-//            }
-//            Text (
-//                "24,Smoke",
-//                modifier = Modifier
-//                    .padding(16.dp),
-//                color = Color.Blue
-////                color = MaterialTheme.colorScheme.primary
-//            )
-//        }
-//
-//
-//    }
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    MyApplicationTheme {
-//        LocationView()
-//    }
-//}
 
-import android.graphics.drawable.Icon
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-//import androidx.compose.foundation.text.TextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -103,7 +13,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -129,21 +38,20 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
+
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.modifier.modifierLocalConsumer
+
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 
+
 data class WeatherData(
     val day: String,
-//    val weatherIcon: Int, // Resource ID for weather icon
     val icon: Int,
     val date: String
 )
@@ -159,7 +67,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    WeatherForecast()
                     ImageLayout()
                 }
             }
@@ -168,50 +75,58 @@ class MainActivity : ComponentActivity() {
 }
 
 
+//@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherForecast() {
-    // Generates weeks dates
+
     val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
+    val dayOfWeekFormat = SimpleDateFormat("EEE", Locale.getDefault())
     val calendar = Calendar.getInstance()
-    val todayDayOfMonth = dateFormat.format(Date()) // Get today's day of the month
+    val today = Date()
 
+    calendar.time = today
+    val currentDay = dayOfWeekFormat.format(calendar.time)
 
-    val weekDates = (0 until 7).map {
+    val weekDays = mutableListOf<String>()
+    val weekDates = mutableListOf<String>()
+    var daysInWeek = 0
 
-        val dayOfMonth = dateFormat.format(calendar.time)
+    while (daysInWeek < 7) {
+        val dateOfWeek = dateFormat.format(calendar.time)
+        val dayOfWeek = dayOfWeekFormat.format(calendar.time)
+        weekDays.add(dayOfWeek)
+        weekDates.add(dateOfWeek)
+
         calendar.add(Calendar.DAY_OF_MONTH, 1)
-        dayOfMonth
-
+        daysInWeek++
     }
-
-
+    val temperatures = mutableListOf("28", "31", "31", "32", "31" , "25" ,"21")
     val weatherList = remember {
         listOf(
-            WeatherData("SAT",R.drawable.sun,weekDates[0]),
-            WeatherData("SUN",R.drawable.cloud ,weekDates[1]),
-            WeatherData("MON",R.drawable.storm,weekDates[2]),
-            WeatherData("TUE",R.drawable.cloud ,weekDates[3]),
-            WeatherData("WED",R.drawable.rain ,weekDates[4]),
-            WeatherData("THU",R.drawable.cloud,weekDates[5]),
-            WeatherData("FRI",R.drawable.cloud, weekDates[6])
+            WeatherData(weekDays[0], R.drawable.sun, temperatures[0]),
+            WeatherData(weekDays[1], R.drawable.cloud, temperatures[1]),
+            WeatherData(weekDays[2], R.drawable.storm, temperatures[2]),
+            WeatherData(weekDays[3], R.drawable.cloud, temperatures[3]),
+            WeatherData(weekDays[4], R.drawable.rain, temperatures[4]),
+            WeatherData(weekDays[5], R.drawable.cloud, temperatures[5]),
+            WeatherData(weekDays[6], R.drawable.cloud, temperatures[6])
         )
     }
 
     LazyRow(
-
         content = {
             items(weatherList) { weatherData ->
-                WeatherColumn(weatherData = weatherData , todayDayOfMonth)
+                WeatherColumn(weatherData = weatherData, currentDay)
             }
         }
     )
 }
 
 @Composable
-fun WeatherColumn(weatherData: WeatherData, today: String) {
+fun WeatherColumn(weatherData: WeatherData, currentDay: String) {
 
-    val iconTint = if (weatherData.date == today) Color.Red else Color.Black
-    val textColor = if (weatherData.date == today) Color.Red else Color.Black
+    val iconTint = if (weatherData.day == currentDay) Color.Red else Color.Black
+    val textColor = if (weatherData.day == currentDay) Color.Red else Color.Black
 
     Column(
         modifier = Modifier
@@ -223,14 +138,14 @@ fun WeatherColumn(weatherData: WeatherData, today: String) {
     ) {
 
         Text(
-            text = weatherData.day, modifier = Modifier.padding(4.dp) ,
+            text = weatherData.day, modifier = Modifier.padding(4.dp),
             color = textColor
         )
         // Display Icon using Image composable
         Image(
             painter = painterResource(id = weatherData.icon), // Use the custom icon resource
             contentDescription = null, // Provide a proper content description
-            modifier = Modifier.size(48.dp) ,// Adjust the size of the icon as needed
+            modifier = Modifier.size(48.dp),// Adjust the size of the icon as needed
             colorFilter = ColorFilter.tint(iconTint)
         )
 
@@ -243,13 +158,13 @@ fun WeatherColumn(weatherData: WeatherData, today: String) {
 }
 
 @Composable
-fun ImageLayout(){
+fun ImageLayout() {
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally ,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg2) ,
+            painter = painterResource(id = R.drawable.bg2),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
@@ -257,6 +172,8 @@ fun ImageLayout(){
         )
     }
 }
+
+//@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyBackgroundImage() {
     // Background image resource
@@ -285,11 +202,8 @@ fun MyBackgroundImage() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-//                        .border(
-//                            width = 2.dp,
-//                            color = Color.Red,
-//                        )
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        ,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(
@@ -330,57 +244,75 @@ fun MyBackgroundImage() {
                     modifier = Modifier
 
                         .fillMaxWidth()
-//                        .border(
-//                            width = 2.dp,
-//                            color = Color.Red,
-//                        )
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        ,
 
-                verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "28",
-                        fontSize = 72.sp,
+                        fontSize = 80.sp,
                         color = Color.White,
                     )
-                    Column (
+                    Column(
                         verticalArrangement = Arrangement.SpaceBetween
-                    ){
+                    ) {
                         Text(
-                             "°C",
-                            fontSize = 16.sp,
+                            "°C",
+                            fontSize = 18.sp,
                             color = Color.White,
                         )
                         Text(
                             text = "SUNNY",
-                            fontSize = 16.sp,
-                            color = Color.White,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(170.dp))
-                    Column (
-                        verticalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
-                        Text(
-                            text = "Date",
                             fontSize = 18.sp,
                             color = Color.White,
                         )
-                        Text(
-                            text = "Time",
-                            fontSize = 18.sp,
-                            color = Color.Red,
-                        )
                     }
+                    Spacer(modifier = Modifier.width(80.dp))
+                    FormatDateTime()
                 }
             }
         }
         WeatherForecast()
     }
 }
+
 @Composable
-fun MainRow( city: String, humidity: String, temperature: String) {
+fun FormatDateTime() {
+
+    val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
+    val dayOfWeekFormat = SimpleDateFormat("EEE", Locale.getDefault())
+    val calendar = Calendar.getInstance()
+    val today = Date()
+
+    calendar.time = today
+    val currentDate = dateFormat.format(calendar.time)
+    val currentDay = dayOfWeekFormat.format(calendar.time)
+
+    val currentTime = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween ,
+        modifier = Modifier.padding(start=30.dp)
+    ) {
+
+
+        Text(
+            text = "$currentDate Oct,$currentDay",
+            fontSize = 18.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = " $currentTime",
+            fontSize = 18.sp,
+            color = Color.Red,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun MainRow(city: String, humidity: String, temperature: String) {
     var isClicked by remember { mutableStateOf(false) }
 
     val backgroundColor = if (isClicked) {
@@ -396,15 +328,12 @@ fun MainRow( city: String, humidity: String, temperature: String) {
     val cityColor = if (isClicked) {
         Color.White // Text color when clicked
     } else {
-       Color.Black // Default text color
+        Color.Black // Default text color
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-
-//            .border(width = 2.dp, color = Color.Red)
-
             .then(if (isClicked) Modifier.shadow(20.dp) else Modifier)
 
             .background(backgroundColor)
@@ -413,24 +342,22 @@ fun MainRow( city: String, humidity: String, temperature: String) {
                 isClicked = !isClicked
             }
             .padding(24.dp)
-            .height(60.dp)
-        ,
+            .height(60.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
+        Column{
             Text(
-                text = city ,
+                text = city,
                 fontSize = 24.sp,
-                color= cityColor ,
+                color = cityColor,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium,
             )
             Text(
-                "Humidity: $humidity"
-                , color = Color(0xFF938F9B),
+                "Humidity: $humidity", color = Color(0xFF938F9B),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top=10.dp)
+                modifier = Modifier.padding(top = 10.dp)
             )
         }
         Text(
@@ -438,12 +365,12 @@ fun MainRow( city: String, humidity: String, temperature: String) {
             color = textColor,
             fontWeight = FontWeight.Medium,
 
-        )
+            )
     }
 }
 
 @Composable
-fun LocationPage (){
+fun LocationPage() {
 
     Column(
         modifier = Modifier
@@ -456,23 +383,22 @@ fun LocationPage (){
                 .fillMaxWidth()
 
 //                .border(width = 1.dp, color = Color.Blue)
-        ){
+        ) {
             Column(
-                modifier = Modifier.weight(3f)
-                    .padding(10.dp)
-                    ,
-                horizontalAlignment = Alignment.Start ,
+                modifier = Modifier
+                    .weight(3f)
+                    .padding(10.dp),
+                horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.SpaceEvenly
 
-            ){
+            ) {
                 Row(
                     modifier = Modifier
 
-                        .fillMaxWidth()
-                            ,
-                    horizontalArrangement = Arrangement.SpaceBetween ,
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
@@ -483,8 +409,8 @@ fun LocationPage (){
                     Text(
                         "LOCATIONS",
                         fontSize = 22.sp,
-                        modifier = Modifier.padding(start=10.dp)
-                        , color = Color.Black,
+                        modifier = Modifier.padding(start = 10.dp),
+                        color = Color.Black,
                         fontWeight = FontWeight.Medium,
                     )
                     Spacer(modifier = Modifier.weight(1f))
@@ -502,24 +428,25 @@ fun LocationPage (){
                 Text(
                     "You are currently getting results " +
                             "for popular places from India",
-                    modifier = Modifier.padding(14.dp)
-                    , color = Color.Black ,
+                    modifier = Modifier.padding(14.dp),
+                    color = Color.Black,
 
-                )
+                    )
                 Button(
                     onClick = { /*TODO*/ },
-                    colors= ButtonDefaults.buttonColors(Color.LightGray ,   Color(0xFF713ABE)) ,
-                    modifier = Modifier.padding(16.dp)
+                    colors = ButtonDefaults.buttonColors(Color.LightGray, Color(0xFF713ABE)),
+                    modifier = Modifier
+                        .padding(16.dp)
                         .height(50.dp),
 
 
-                )
+                    )
                 {
                     Text(
-                        "Choose Place" ,
+                        "Choose Place",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
-                        )
+                    )
 
 
                 }
@@ -529,10 +456,10 @@ fun LocationPage (){
                 modifier = Modifier
                     .weight(1.5f)
                     .fillMaxHeight()
-                    .background(color = Color.LightGray) ,
+                    .background(color = Color.LightGray),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
@@ -542,7 +469,7 @@ fun LocationPage (){
                 )
                 Text(
                     "ADD PLACE",
-                    fontSize = 14.sp ,
+                    fontSize = 14.sp,
 //                    modifier = Modifier.margin
                     color = Color.Black,
                     fontWeight = FontWeight.Medium,
@@ -563,12 +490,12 @@ fun LocationPage (){
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun Preview2() {
     MyApplicationTheme {
 //        WeatherForecast()
 //        ImageLayout()
-//        MyBackgroundImage()
-        LocationPage()
+        MyBackgroundImage()
+//        LocationPage()
 //        MainRow("Bhopal", "35%", "21, Clear")
 
     }
