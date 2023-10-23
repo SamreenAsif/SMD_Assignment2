@@ -67,35 +67,29 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ImageLayout()
+                    MyBackgroundImage()
                 }
             }
         }
     }
 }
 
-
-//@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeatherForecast() {
 
-    val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
     val dayOfWeekFormat = SimpleDateFormat("EEE", Locale.getDefault())
     val calendar = Calendar.getInstance()
-    val today = Date()
 
-    calendar.time = today
+    calendar.time = Date()
     val currentDay = dayOfWeekFormat.format(calendar.time)
 
     val weekDays = mutableListOf<String>()
-    val weekDates = mutableListOf<String>()
     var daysInWeek = 0
 
     while (daysInWeek < 7) {
-        val dateOfWeek = dateFormat.format(calendar.time)
+
         val dayOfWeek = dayOfWeekFormat.format(calendar.time)
         weekDays.add(dayOfWeek)
-        weekDates.add(dateOfWeek)
 
         calendar.add(Calendar.DAY_OF_MONTH, 1)
         daysInWeek++
@@ -141,11 +135,11 @@ fun WeatherColumn(weatherData: WeatherData, currentDay: String) {
             text = weatherData.day, modifier = Modifier.padding(4.dp),
             color = textColor
         )
-        // Display Icon using Image composable
+
         Image(
-            painter = painterResource(id = weatherData.icon), // Use the custom icon resource
-            contentDescription = null, // Provide a proper content description
-            modifier = Modifier.size(48.dp),// Adjust the size of the icon as needed
+            painter = painterResource(id = weatherData.icon),
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
             colorFilter = ColorFilter.tint(iconTint)
         )
 
@@ -173,7 +167,6 @@ fun ImageLayout() {
     }
 }
 
-//@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyBackgroundImage() {
     // Background image resource
@@ -181,7 +174,6 @@ fun MyBackgroundImage() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
-//        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -283,9 +275,9 @@ fun FormatDateTime() {
     val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
     val dayOfWeekFormat = SimpleDateFormat("EEE", Locale.getDefault())
     val calendar = Calendar.getInstance()
-    val today = Date()
 
-    calendar.time = today
+
+    calendar.time =  Date()
     val currentDate = dateFormat.format(calendar.time)
     val currentDay = dayOfWeekFormat.format(calendar.time)
 
@@ -316,19 +308,19 @@ fun MainRow(city: String, humidity: String, temperature: String) {
     var isClicked by remember { mutableStateOf(false) }
 
     val backgroundColor = if (isClicked) {
-        Color(0xFF834ECE) // Change to your desired color
+        Color(0xFF834ECE)
     } else {
-        Color.White // Default background color
+        Color.White
     }
     val textColor = if (isClicked) {
-        Color.Magenta // Text color when clicked
+        Color.Magenta
     } else {
-        Color(0xFF713ABE)// Default text color
+        Color(0xFF713ABE)
     }
     val cityColor = if (isClicked) {
-        Color.White // Text color when clicked
+        Color.White
     } else {
-        Color.Black // Default text color
+        Color.Black
     }
 
     Row(
