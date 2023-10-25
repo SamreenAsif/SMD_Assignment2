@@ -1,4 +1,4 @@
-
+package com.example.myapplication
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,8 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
@@ -23,7 +21,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import com.example.myapplication.R
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -36,18 +33,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-
 import androidx.compose.ui.graphics.ColorFilter
-
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 
 
 data class WeatherData(
@@ -60,14 +55,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    MyBackgroundImage()
+                )
+                {
+                    LocationPage()
                 }
             }
         }
@@ -152,25 +147,9 @@ fun WeatherColumn(weatherData: WeatherData, currentDay: String) {
 }
 
 @Composable
-fun ImageLayout() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.bg2),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .height(500.dp)
-        )
-    }
-}
-
-@Composable
 fun MyBackgroundImage() {
     // Background image resource
-    val backgroundImageRes = R.drawable.bg2
+    val backgroundImageRes = R.drawable.bg1
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -473,9 +452,11 @@ fun LocationPage() {
             color = Color.Gray,
             thickness = 1.dp,
         )
+
         MainRow("Mumbai", "51%", "28, Sunny")
         MainRow("Indore", "35%", "24, Smoke")
         MainRow("Bhopal", "35%", "21, Clear")
+
     }
 }
 
@@ -484,11 +465,13 @@ fun LocationPage() {
 @Composable
 fun Preview2() {
     MyApplicationTheme {
-//        WeatherForecast()
-//        ImageLayout()
         MyBackgroundImage()
-//        LocationPage()
-//        MainRow("Bhopal", "35%", "21, Clear")
-
     }
+//        val navController = rememberNavController()
+//
+//        NavHost(navController, startDestination = Routes.LOCATIONS_PAGE) {
+//            composable(route = Routes.LOCATIONS_PAGE) { com.example.myapplication.LocationPage(navController) }
+//            composable(route = Routes.MY_BACKGROUND_IMAGE) { com.example.myapplication.MyBackgroundImage() }
+//        }
+//    }
 }
